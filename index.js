@@ -36,7 +36,7 @@ async function mailSender(body) {
 
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // console.log(name, id, phone, company, email, body);
+
 }
 
 
@@ -47,7 +47,7 @@ async function run() {
 
         app.get("/hobby", async (req, res) => {
             let result;
-            if (req.query.latest) {
+            if (req.query.latest === 'true') {
                 result = await hobbyCollection.find().sort({ $natural: 1 }).toArray()
             }
             else {
@@ -73,7 +73,7 @@ async function run() {
             res.send(result)
         })
         app.delete("/hobby/:id", async (req, res) => {
-            const result = await hobbyCollection.deleteOne({ _id: ObjectId(id) })
+            const result = await hobbyCollection.deleteOne({ _id: ObjectId(req.params.id) })
             res.send(result)
         })
 
