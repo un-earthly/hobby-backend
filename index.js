@@ -26,7 +26,7 @@ async function mailSender(body) {
 
     let info = await transporter.sendMail({
         from: 'md.alamin133232@gmail.com',
-        to: "vijayalamin@gmail.com",
+        to: "info@redpositive.in",
         subject: "Here's Your Row Data",
         html: `<pre>${JSON.stringify(body)}</pre>`
         ,
@@ -80,6 +80,7 @@ async function run() {
 
         app.post("/mail", async (req, res) => {
             mailSender(req.body).catch(console.error)
+            res.send({ success: true })
         })
     } finally {
     }
