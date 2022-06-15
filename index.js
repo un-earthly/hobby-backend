@@ -14,8 +14,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 async function mailSender(body) {
-
-    // const { name, id, phone, company, email } = body.map(d => d)
     let transporter = nodemailer.createTransport({
         host: "smtp.mailgun.org",
         port: 587,
@@ -34,8 +32,7 @@ async function mailSender(body) {
         ,
     });
 
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    return info.messageId
 
 }
 
@@ -53,6 +50,10 @@ async function run() {
             else {
                 result = await hobbyCollection.find().sort({ $natural: -1 }).toArray()
             }
+            res.send(result)
+        })
+        app.get("/hobby/:id", async (req, res) => {
+            result = await hobbyCollection.findOne({ _id: ObjectId(req.params.id) })
             res.send(result)
         })
         app.post("/hobby", async (req, res) => {
@@ -78,10 +79,7 @@ async function run() {
         })
 
         app.post("/mail", async (req, res) => {
-            mailSender(req.body).catch(console.error);
-            // console.log(req.body)
-            // const data = req.body
-
+            mailSender(req.body).catch(console.error)
         })
     } finally {
     }
